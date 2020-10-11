@@ -1,0 +1,23 @@
+{
+  "name": "proshop",
+  "version": "1.0.0",
+  "description": "Mern Ecommerce Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevenespinal/ProShop.git"
+  },
+  "keywords": [],
+  "author": "Steven Espinal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stevenespinal/ProShop/issues"
+  },
+  "homepage": "https://github.com/stevenespinal/ProShop#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
