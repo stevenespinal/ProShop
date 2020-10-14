@@ -13,7 +13,7 @@ export const cart = (state = {cartItems: []}, action) => {
         return {...state, cartItems: [...state.cartItems, cartItem]};
       }
     case CART_REMOVE_ITEM:
-      return;
+      return {...state, cartItems: state.cartItems.filter(x => x.product !== action.item)};
     default:
       return state;
   }

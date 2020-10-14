@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Message from "../components/Message";
 import {Row, Col, ListGroup, Image, Form, Button, Card} from "react-bootstrap";
-import {addToCart} from "../actions/Cart";
+import {addToCart, removeFromCart} from "../actions/Cart";
 
 const CartScreen = ({match, location, history}) => {
   const dispatch = useDispatch();
@@ -11,8 +11,8 @@ const CartScreen = ({match, location, history}) => {
   const productId = match.params.id;
   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
-  const removeFromCart = id => {
-
+  const removeItemFromCart = id => {
+    dispatch(removeFromCart(id));
   }
 
   const checkOut = () => {
@@ -57,7 +57,7 @@ const CartScreen = ({match, location, history}) => {
                       </Form.Control>
                     </Col>
                     <Col md={2}>
-                      <Button type="button" variant="light" onClick={removeFromCart(item.product)}>
+                      <Button type="button" variant="light" onClick={() => removeItemFromCart(item.product)}>
                         <i className="fas fa-trash"/>
                       </Button>
                     </Col>
@@ -75,7 +75,7 @@ const CartScreen = ({match, location, history}) => {
                 Total: ${cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)}
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button type="button" className="btn-block" disabled={cartItems.length === 0} onClick={checkOut}>Proceed To Checkout</Button>
+                <Button type="button" className="btn-block" disabled={cartItems.length === 0} onClick={() => checkOut()}>Proceed To Checkout</Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>
