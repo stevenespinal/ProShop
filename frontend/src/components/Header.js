@@ -7,7 +7,10 @@ import {logout} from "../actions/User";
 const Header = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector(state => state.userLogin);
+  const cartItems = useSelector(({cart: {cartItems}}) => cartItems);
   const {userInfo} = userLogin;
+  const cartItemsLength = () => cartItems.reduce((acc, item) => acc + item.qty, 0)
+
 
   const logOutHandler = () => {
     dispatch(logout());
@@ -24,18 +27,18 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <LinkContainer to="/cart">
-                <Nav.Link>Cart <i className="fas fa-shopping-cart"/></Nav.Link>
+                <Nav.Link>({cartItemsLength()}) Cart <i className="fas fa-shopping-cart"/></Nav.Link>
               </LinkContainer>
               {userInfo ? <NavDropdown title={userInfo.name} id="username">
-                <LinkContainer to="/profile">
-                  <NavDropdown.Item>Profile</NavDropdown.Item>
-                </LinkContainer>
-                <NavDropdown.Item onClick={logOutHandler}>Log Out</NavDropdown.Item>
+                  <LinkContainer to="/profile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={logOutHandler}>Log Out</NavDropdown.Item>
                 </NavDropdown> :
-              <LinkContainer to="/login">
-                <Nav.Link>Sign In <i className="fas fa-user"/></Nav.Link>
-              </LinkContainer>
-                }
+                <LinkContainer to="/login">
+                  <Nav.Link>Sign In <i className="fas fa-user"/></Nav.Link>
+                </LinkContainer>
+              }
             </Nav>
           </Navbar.Collapse>
         </Container>

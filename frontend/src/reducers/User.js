@@ -1,4 +1,12 @@
-import {USER_LOGIN_FAILED, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT} from "../types";
+import {
+  USER_LOGIN_FAILED,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+  USER_LOGOUT,
+  USER_REGISTER_FAILED,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS
+} from "../types";
 
 export const userLogin = (state = {}, action) => {
   const {type, userInfo, error} = action;
@@ -6,12 +14,28 @@ export const userLogin = (state = {}, action) => {
     case USER_LOGIN_REQUEST:
       return {loading: true};
     case USER_LOGIN_SUCCESS:
-      return {loading: false, userInfo}
+      return {loading: false, userInfo};
     case USER_LOGIN_FAILED:
-      return {loading: false, error}
+      return {loading: false, error};
     case USER_LOGOUT:
-      return {}
+      return {};
     default:
       return state;
   }
 }
+
+export const userRegister = (state = {}, action) => {
+  const {type, userInfo, error} = action;
+  switch (type) {
+    case USER_REGISTER_REQUEST:
+      return {loading: true};
+    case USER_REGISTER_SUCCESS:
+      return {loading: false, userInfo};
+    case USER_REGISTER_FAILED:
+      return {loading: false, error};
+    default:
+      return state;
+  }
+}
+
+
