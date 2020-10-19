@@ -6,7 +6,6 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS
 } from "../types";
-// import thunk from "redux-thunk";
 import axios from "axios";
 
 export const listProducts = () => async dispatch => {
