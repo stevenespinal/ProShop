@@ -1,4 +1,4 @@
-import {USER_LOGIN_FAILED, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS} from "../types";
+import {USER_LOGIN_FAILED, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT} from "../types";
 import axios from "axios";
 
 export const login = (email, password) => async dispatch => {
@@ -18,4 +18,9 @@ export const login = (email, password) => async dispatch => {
       error: error.response && error.response.data.message ? error.response.data.message : error.message
     });
   }
+}
+
+export const logout = () => dispatch => {
+  localStorage.removeItem("userInfo");
+  dispatch({type: USER_LOGOUT});
 }
