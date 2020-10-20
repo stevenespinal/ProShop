@@ -1,7 +1,7 @@
-import {CART_ADD_ITEM, CART_REMOVE_ITEM, CART_SAVE_SHIPPING_ADDRESS} from "../types";
+import {CART_ADD_ITEM, CART_REMOVE_ITEM, CART_SAVE_PAYMENT_METHOD, CART_SAVE_SHIPPING_ADDRESS} from "../types";
 
 export const cart = (state = {cartItems: [], shippingAddress: {}}, action) => {
-  const {type, item, shippingAddress} = action;
+  const {type, item, shippingAddress, method} = action;
   switch (type) {
     case CART_ADD_ITEM:
       const cartItem = item;
@@ -16,6 +16,8 @@ export const cart = (state = {cartItems: [], shippingAddress: {}}, action) => {
       return {...state, cartItems: state.cartItems.filter(x => x.product !== action.item)};
     case CART_SAVE_SHIPPING_ADDRESS:
       return {...state, shippingAddress};
+    case CART_SAVE_PAYMENT_METHOD:
+      return {...state, method}
     default:
       return state;
   }
