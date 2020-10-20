@@ -5,7 +5,12 @@ import {
   USER_LOGOUT,
   USER_REGISTER_FAILED,
   USER_REGISTER_SUCCESS,
-  USER_REGISTER_REQUEST
+  USER_REGISTER_REQUEST,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAILED,
+  USER_UPDATE_PROFILE_REQUEST,
+  USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAILED
 } from "../types";
 import axios from "axios";
 
@@ -44,6 +49,50 @@ export const register = (name, email, password) => async dispatch => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAILED,
+      error: error.response && error.response.data.message ? error.response.data.message : error.message
+    });
+  }
+}
+
+export const getUserDetails = id => async (dispatch, getState) => {
+  try {
+    dispatch({type: USER_DETAILS_REQUEST});
+
+    const {userLogin: {userInfo}} = getState();
+    const config = {
+      headers: {
+        'Content-Type': "application/json",
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    const {data} = await axios.get(`/api/users/${id}`, config);
+    dispatch({type: USER_DETAILS_SUCCESS, user: data})
+
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_FAILED,
+      error: error.response && error.response.data.message ? error.response.data.message : error.message
+    });
+  }
+}
+
+export const updateUserProfile = user => async (dispatch, getState) => {
+  try {
+    dispatch({type: USER_UPDATE_PROFILE_REQUEST});
+
+    const {userLogin: {userInfo}} = getState();
+    const config = {
+      headers: {
+        'Content-Type': "application/json",
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    const {data} = await axios.put(`/api/users/profile`, user, config);
+    dispatch({type: USER_UPDATE_PROFILE_SUCCESS, userInfo: data})
+
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_PROFILE_FAILED,
       error: error.response && error.response.data.message ? error.response.data.message : error.message
     });
   }
