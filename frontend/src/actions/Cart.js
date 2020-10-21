@@ -29,5 +29,5 @@ export const saveShippingAddress = data => dispatch => {
 
 export const savePaymentMethod = method => dispatch => {
   dispatch({type: CART_SAVE_PAYMENT_METHOD, method});
-  localStorage.setItem("paymentMethod", JSON.stringify(method));
+  localStorage.setItem("method", JSON.stringify(method));
 }

@@ -22,7 +22,7 @@ const PaymentMethodScreen = ({history}) => {
 
   return (
     <FormContainer>
-      <CheckoutSteps login shipping payment/>
+      <CheckoutSteps login shipping/>
       <h1>Payment Method</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="paymentMethod">

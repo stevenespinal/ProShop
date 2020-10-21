@@ -5,8 +5,8 @@ import {Breadcrumb} from "react-bootstrap";
 const CheckoutSteps = ({login, shipping, payment, placeOrder}) => {
   return (
     <Breadcrumb className="justify-content-center mb-4">
-      {login ? <LinkContainer to="/login"><Breadcrumb.Item active>Sign In</Breadcrumb.Item></LinkContainer> :
-        <Breadcrumb.Item>Sign In</Breadcrumb.Item>}
+      {login ? <LinkContainer to="/login"><Breadcrumb.Item active>Home</Breadcrumb.Item></LinkContainer> :
+        <Breadcrumb.Item>Home</Breadcrumb.Item>}
       {shipping ? <LinkContainer to="/shipping"><Breadcrumb.Item active>Shipping</Breadcrumb.Item></LinkContainer> :
         <Breadcrumb.Item>Shipping</Breadcrumb.Item>}
       {payment ? <LinkContainer to="/payment"><Breadcrumb.Item active>Payment</Breadcrumb.Item></LinkContainer> :

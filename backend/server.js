@@ -5,6 +5,7 @@ const port = process.env.PORT || 5000;
 import connectDb from "./config/db.js";
 import product from "./routes/product.js";
 import user from "./routes/user.js"
+import order from "./routes/order.js"
 import {errorHandler, notFound} from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", product);
 app.use("/api/users", user);
+app.use("/api/orders", order);
 app.use(notFound);
 app.use(errorHandler);
 
