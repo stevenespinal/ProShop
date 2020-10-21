@@ -13,11 +13,11 @@ const PlaceOrderScreen = ({history}) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   }
   const orderCreate = useSelector(({createOrder}) => createOrder);
-  const {success, loading, order, error} = orderCreate;
+  const {success, order, error} = orderCreate;
 
   useEffect(() => {
     if (success) {
-      history.push(`/order/${order._id}`)
+      history.push(`/orders/${order._id}`)
     }
     // eslint-disable-next-line
   }, [history, success]);
@@ -78,7 +78,6 @@ const PlaceOrderScreen = ({history}) => {
           </ListGroup>
           <Button className="mr-3" type="button" variant="info" onClick={() => history.push("/payment")}>Go
             Back</Button>
-          <Button type="submit" variant="primary">Continue</Button>
         </Col>
         <Col md={4}>
           <Card>
