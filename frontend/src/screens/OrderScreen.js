@@ -29,7 +29,7 @@ const OrderScreen = ({match}) => {
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h2>Shipping:</h2>
               <p><strong>Name: </strong> {order.user.name}</p>
               <p><strong>Email: </strong><a href={`mailto:${order.user.email}`}>{order.user.email}</a></p>
               <p>
@@ -39,14 +39,14 @@ const OrderScreen = ({match}) => {
 
             </ListGroup.Item>
             <ListGroup.Item>
-              <h2>Payment Method</h2>
+              <h2>Payment Method:</h2>
               <p>
                 <strong>Method:</strong> {order.paymentMethod}
               </p>
               {order.isPaid ? <Message variant="success">Paid On {order.paidAt}</Message> : <Message variant="danger">Not Paid</Message>}
             </ListGroup.Item>
             <ListGroup.Item>
-              <h2>Order Items</h2>
+              <h2>Order Items:</h2>
               {order.orderItems.length === 0 ? <Message variant="danger">Your Cart Is Empty</Message> : (
                 <ListGroup variant="flush">
                   {order.orderItems.map((item, index) => (
