@@ -4,7 +4,7 @@ import {
   ORDER_CREATE_SUCCESS,
   ORDER_FETCH_BY_ID_FAILED,
   ORDER_FETCH_BY_ID_REQUEST,
-  ORDER_FETCH_BY_ID_SUCCESS
+  ORDER_FETCH_BY_ID_SUCCESS, ORDER_PAY_FAILED, ORDER_PAY_REQUEST, ORDER_PAY_RESET, ORDER_PAY_SUCCESS
 } from "../types";
 
 export const createOrder = (state = {}, action) => {
@@ -30,6 +30,22 @@ export const fetchOrder = (state = {loading: true, orderItems: [], shippingAddre
       return {loading: false, order};
     case ORDER_FETCH_BY_ID_FAILED:
       return {loading: false, error}
+    default:
+      return state;
+  }
+}
+
+export const payOrder = (state = {}, action) => {
+  const {type, error} = action;
+  switch (type) {
+    case ORDER_PAY_REQUEST:
+      return {loading: true};
+    case ORDER_PAY_SUCCESS:
+      return {loading: false, success: true};
+    case ORDER_PAY_FAILED:
+      return {loading: false, error};
+    case ORDER_PAY_RESET:
+      return {};
     default:
       return state;
   }
