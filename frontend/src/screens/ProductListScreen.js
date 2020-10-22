@@ -103,7 +103,7 @@ const ProductListScreen = ({history, match}) => {
                 Close
               </Button>
               <Button variant="primary" onClick={() => deleteProductHandler(modal.data._id)}>
-                Save Changes
+                Delete Product
               </Button>
             </Modal.Footer>
           </Modal>

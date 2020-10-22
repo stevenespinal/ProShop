@@ -91,7 +91,7 @@ const UserListScreen = ({history}) => {
                 Close
               </Button>
               <Button variant="primary" onClick={() => deleteHandler(modal.data._id)}>
-                Save Changes
+                Delete User
               </Button>
             </Modal.Footer>
           </Modal>
