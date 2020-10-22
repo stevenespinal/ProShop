@@ -10,7 +10,13 @@ import {
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAILED,
   USER_UPDATE_PROFILE_REQUEST,
-  USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAILED, USER_DETAILS_RESET, ORDER_LIST_PROFILE_RESET
+  USER_UPDATE_PROFILE_SUCCESS,
+  USER_UPDATE_PROFILE_FAILED,
+  USER_DETAILS_RESET,
+  ORDER_LIST_PROFILE_RESET,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAILED
 } from "../types";
 import axios from "axios";
 
@@ -97,6 +103,27 @@ export const updateUserProfile = user => async (dispatch, getState) => {
     });
   }
 }
+
+export const listUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({type: USER_LIST_REQUEST});
+
+    const {userLogin: {userInfo}} = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    const {data} = await axios.get(`/api/users`, config);
+    dispatch({type: USER_LIST_SUCCESS, users: data});
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAILED,
+      error: error.response && error.response.data.message ? error.response.data.message : error.message
+    });
+  }
+}
+
 
 export const logout = () => dispatch => {
   localStorage.removeItem("userInfo");
