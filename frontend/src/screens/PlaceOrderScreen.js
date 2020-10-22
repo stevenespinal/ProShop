@@ -19,7 +19,6 @@ const PlaceOrderScreen = ({history}) => {
     if (success) {
       history.push(`/orders/${order._id}`)
     }
-    // eslint-disable-next-line
   }, [history, success]);
 
   cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0));
@@ -35,7 +34,7 @@ const PlaceOrderScreen = ({history}) => {
       taxPrice: cart.taxPrice,
       totalPrice: cart.totalPrice,
       itemsPrice: cart.itemsPrice
-    }))
+    }));
   }
 
   const {address, city, country, postalCode} = cart.shippingAddress;

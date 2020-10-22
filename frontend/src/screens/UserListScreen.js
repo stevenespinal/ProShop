@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {LinkContainer} from "react-router-bootstrap";
-import {Table, Button, Modal} from "react-bootstrap";
+import {Table, Button} from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {listUsers, deleteUser} from "../actions/User";
 
 const UserListScreen = ({history}) => {
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const userList = useSelector(({userList}) => userList);
   const {loading, error, users} = userList;
@@ -25,12 +24,9 @@ const UserListScreen = ({history}) => {
 
   }, [dispatch, history, userInfo, success]);
 
-  const showModal = () => setShow(true);
-  const hideModal = () => setShow(false);
 
   const deleteHandler = userId => {
     dispatch(deleteUser(userId));
-    setShow(false);
   }
 
   return (
@@ -65,23 +61,9 @@ const UserListScreen = ({history}) => {
                     <i className="fas fa-edit"/>
                   </Button>
                 </LinkContainer>
-                <Button variant="danger" type="button" className="btn-sm" onClick={() => showModal()}>
+                <Button variant="danger" type="button" className="btn-sm" onClick={() => deleteHandler(user._id)}>
                   <i className="fas fa-trash"/>
                 </Button>
-                <Modal show={show} onHide={() => hideModal()}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Delete {user.name}?</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>Are you sure you would like to delete this user?</Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={() => hideModal()}>
-                      Cancel
-                    </Button>
-                    <Button variant="primary" onClick={() => deleteHandler(user._id)}>
-                      Delete
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
               </td>
             </tr>
           ))}
