@@ -6,7 +6,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {listUsers, deleteUser} from "../actions/User";
 
-const UserList = ({history}) => {
+const UserListScreen = ({history}) => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const userList = useSelector(({userList}) => userList);
@@ -60,7 +60,7 @@ const UserList = ({history}) => {
                   <i className="fas fa-times" style={{color: "red"}}/>}
               </td>
               <td>
-                <LinkContainer to={`/user/${user._id}/edit`}>
+                <LinkContainer to={`/admin/user/${user._id}/edit`}>
                   <Button variant="light" type="button" className="btn-sm">
                     <i className="fas fa-edit"/>
                   </Button>
@@ -92,4 +92,4 @@ const UserList = ({history}) => {
   )
 }
 
-export default UserList;
+export default UserListScreen;
