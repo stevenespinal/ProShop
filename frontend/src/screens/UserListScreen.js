@@ -1,12 +1,16 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {LinkContainer} from "react-router-bootstrap";
-import {Table, Button} from "react-bootstrap";
+import {Table, Button, Modal} from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {listUsers, deleteUser} from "../actions/User";
 
 const UserListScreen = ({history}) => {
+  const [modal, setModal] = useState({
+    show: false,
+    data: {}
+  });
   const dispatch = useDispatch();
   const userList = useSelector(({userList}) => userList);
   const {loading, error, users} = userList;
@@ -27,6 +31,15 @@ const UserListScreen = ({history}) => {
 
   const deleteHandler = userId => {
     dispatch(deleteUser(userId));
+    setModal({show: false, data: {}});
+  }
+
+  const handleClose = () => {
+    setModal({show: false, data: {}});
+  }
+
+  const handleOpen = (data) => {
+    setModal({show: true, data})
   }
 
   return (
@@ -61,12 +74,27 @@ const UserListScreen = ({history}) => {
                     <i className="fas fa-edit"/>
                   </Button>
                 </LinkContainer>
-                <Button variant="danger" type="button" className="btn-sm" onClick={() => deleteHandler(user._id)}>
+                <Button variant="danger" type="button" className="btn-sm" onClick={() => handleOpen(user)}>
+                {/*<Button variant="danger" type="button" className="btn-sm" onClick={() => deleteHandler(user._id)}>*/}
                   <i className="fas fa-trash"/>
                 </Button>
               </td>
             </tr>
           ))}
+          <Modal show={modal.show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete {modal.data.name}?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to delete {modal.data.name}?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => deleteHandler(modal.data._id)}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
           </tbody>
         </Table>
       )}

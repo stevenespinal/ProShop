@@ -46,6 +46,8 @@ export const userRegister = (state = {}, action) => {
       return {loading: false, userInfo};
     case USER_REGISTER_FAILED:
       return {loading: false, error};
+    case USER_LOGOUT:
+      return {};
     default:
       return state;
   }
