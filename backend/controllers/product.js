@@ -25,4 +25,42 @@ export const deleteProductById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Product does not exist.");
   }
+});
+
+export const createProduct = asyncHandler(async (req, res) => {
+  const user = req.user._id;
+  const {name, image, brand, category, description, price, reviews, rating, numReviews, countInStock} = req.body;
+  const newProduct = await Product.create({
+    user,
+    name,
+    image,
+    brand,
+    category,
+    description,
+    price,
+    reviews,
+    rating,
+    numReviews,
+    countInStock
+  });
+
+  if (newProduct) {
+    res.status(201).json({
+      user: newProduct.user,
+      name: newProduct.name,
+      image: newProduct.image,
+      brand: newProduct.brand,
+      category: newProduct.category,
+      description: newProduct.description,
+      price: newProduct.price,
+      reviews: newProduct.reviews,
+      rating: newProduct.rating,
+      numReviews: newProduct.numReviews,
+      countInStock: newProduct.countInStock
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid product data.");
+  }
+
 })
