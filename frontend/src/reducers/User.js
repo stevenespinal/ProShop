@@ -1,9 +1,13 @@
 import {
+  USER_DELETE_FAILED,
+  USER_DELETE_REQUEST, USER_DELETE_SUCCESS,
   USER_DETAILS_FAILED,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
-  USER_DETAILS_SUCCESS, USER_LIST_FAILED,
-  USER_LIST_REQUEST, USER_LIST_RESET,
+  USER_DETAILS_SUCCESS,
+  USER_LIST_FAILED,
+  USER_LIST_REQUEST,
+  USER_LIST_RESET,
   USER_LIST_SUCCESS,
   USER_LOGIN_FAILED,
   USER_LOGIN_REQUEST,
@@ -63,7 +67,6 @@ export const userDetails = (state = {user: {}}, action) => {
   }
 }
 
-
 export const userUpdateProfile = (state = {user: {}}, action) => {
   const {type, userInfo, error} = action;
   switch (type) {
@@ -77,7 +80,6 @@ export const userUpdateProfile = (state = {user: {}}, action) => {
       return state;
   }
 }
-
 
 export const userList = (state = {users: []}, action) => {
   const {type, users, error} = action;
@@ -95,4 +97,16 @@ export const userList = (state = {users: []}, action) => {
   }
 }
 
-
+export const userDelete = (state = {user: {}}, action) => {
+  const {type, error} = action;
+  switch (type) {
+    case USER_DELETE_REQUEST:
+      return {loading: true};
+    case USER_DELETE_SUCCESS:
+      return {loading: false, success: true};
+    case USER_DELETE_FAILED:
+      return {loading: false, error};
+    default:
+      return state;
+  }
+}

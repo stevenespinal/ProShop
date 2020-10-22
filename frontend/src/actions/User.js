@@ -16,7 +16,7 @@ import {
   ORDER_LIST_PROFILE_RESET,
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
-  USER_LIST_FAILED, USER_LIST_RESET
+  USER_LIST_FAILED, USER_LIST_RESET, USER_DELETE_REQUEST, USER_DELETE_SUCCESS, USER_DELETE_FAILED
 } from "../types";
 import axios from "axios";
 
@@ -119,6 +119,27 @@ export const listUsers = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_LIST_FAILED,
+      error: error.response && error.response.data.message ? error.response.data.message : error.message
+    });
+  }
+}
+
+
+export const deleteUser = userId => async (dispatch, getState) => {
+  try {
+    dispatch({type: USER_DELETE_REQUEST});
+
+    const {userLogin: {userInfo}} = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    await axios.delete(`/api/users/${userId}`, config);
+    dispatch({type: USER_DELETE_SUCCESS});
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_FAILED,
       error: error.response && error.response.data.message ? error.response.data.message : error.message
     });
   }
