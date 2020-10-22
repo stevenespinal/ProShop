@@ -131,7 +131,8 @@ const ProfileScreen = ({history}) => {
                   <i className="fas fa-times" style={{color: "red"}}/>}</td>
                 <td>{order.isDelivered ? moment(order.deliveredAt).format('MMMM Do YYYY, h:mm a') :
                   <i className="fas fa-times" style={{color: "red"}}/>}</td>
-                <td><LinkContainer to={`/orders/${order._id}`}><Button variant="light" className="btn-sm">Details</Button></LinkContainer>
+                <td><LinkContainer to={`/orders/${order._id}`}><Button variant="light"
+                                                                       className="btn-sm">Details</Button></LinkContainer>
                 </td>
               </tr>
             ))}
