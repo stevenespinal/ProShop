@@ -3,11 +3,12 @@ import {fetchOrder, payOrder} from "../actions/Order";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import {Card, Col, Image, ListGroup, Row, Button} from "react-bootstrap";
+import {Card, Col, Image, ListGroup, Row} from "react-bootstrap";
 import {PayPalButton} from "react-paypal-button-v2";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import {ORDER_PAY_RESET} from "../types";
+import moment from "moment";
 
 const OrderScreen = ({match}) => {
   const dispatch = useDispatch();
@@ -41,13 +42,24 @@ const OrderScreen = ({match}) => {
     }
   }, [dispatch, match.params.id, order, successPay]);
 
+  const addDecimals = num => {
+    return (Math.round(num * 100) / 100).toFixed(2);
+  }
+
   if (!loading && order) {
+    order.taxPrice = addDecimals(order.taxPrice);
+    order.shippingPrice = addDecimals(order.shippingPrice);
+    order.totalPrice = addDecimals(order.totalPrice);
     order.itemsPrice = order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2);
   }
 
   const successPayment = (paymentResult) => {
     console.log(paymentResult);
     dispatch(payOrder(match.params.id, paymentResult))
+  }
+
+  const errorPayment = () => {
+    console.log(errorPay)
   }
 
   return loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> : (
@@ -64,7 +76,7 @@ const OrderScreen = ({match}) => {
               <p>
                 <strong>Address:</strong> {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalCode}, {order.shippingAddress.country}
               </p>
-              {order.isDelivered ? <Message variant="success">Delivered At {order.deliveredAt}</Message> :
+              {order.isDelivered ? <Message variant="success">Delivered At {moment(order.deliveredAt).format('MMMM Do YYYY, h:mm a')}</Message> :
                 <Message variant="danger">Not Delivered</Message>}
 
             </ListGroup.Item>
@@ -73,7 +85,7 @@ const OrderScreen = ({match}) => {
               <p>
                 <strong>Method:</strong> {order.paymentMethod}
               </p>
-              {order.isPaid ? <Message variant="success">Paid On {order.paidAt}</Message> :
+              {order.isPaid ? <Message variant="success">Paid On {moment(order.paidAt).format('MMMM Do YYYY, h:mm a')}</Message> :
                 <Message variant="danger">Not Paid</Message>}
             </ListGroup.Item>
             <ListGroup.Item>
@@ -131,7 +143,7 @@ const OrderScreen = ({match}) => {
               {!order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader/>}
-                  {!sdkReady ? <Loader/> : <PayPalButton amount={order.totalPrice} onSuccess={successPayment}/>}
+                  {!sdkReady ? <Loader/> : <PayPalButton amount={order.totalPrice} onError={errorPayment} onSuccess={successPayment}/>}
                 </ListGroup.Item>
               )}
             </ListGroup>

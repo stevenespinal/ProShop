@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Form, Button, Row, Col} from "react-bootstrap";
+import {Form, Button, Row, Col, Table} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import {getUserDetails, updateUserProfile} from "../actions/User";
+import {listProfileOrders} from "../actions/Order";
+import {LinkContainer} from "react-router-bootstrap";
+import moment from "moment";
 
 const ProfileScreen = ({history}) => {
   const [name, setName] = useState("");
@@ -13,17 +16,20 @@ const ProfileScreen = ({history}) => {
   const [message, setMessage] = useState(null);
   const dispatch = useDispatch();
 
-  const userDetails = useSelector(state => state.userDetails);
+  const userDetails = useSelector(({userDetails}) => userDetails);
   const {loading, error, user} = userDetails;
-  const userLogin = useSelector(state => state.userLogin);
+  const userLogin = useSelector(({userLogin}) => userLogin);
   const {userInfo} = userLogin;
-  const userUpdateProfile = useSelector(state => state.userUpdateProfile);
+  const userUpdateProfile = useSelector(({userUpdateProfile}) => userUpdateProfile);
   const {success} = userUpdateProfile;
+  const orderProfileList = useSelector(({listProfileOrders}) => listProfileOrders);
+  const {loading: loadingOrders, error: errorOrders, orders} = orderProfileList;
 
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
+      dispatch(listProfileOrders());
       if (!user.name) {
         dispatch(getUserDetails('profile'));
       } else {
@@ -93,6 +99,35 @@ const ProfileScreen = ({history}) => {
 
       <Col md={9}>
         <h2>My Orders</h2>
+        {loadingOrders ? <Loader/> : errorOrders ? <Message variant="danger">{errorOrders}</Message> : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>DATE</th>
+              <th>TOTAL</th>
+              <th>PAID</th>
+              <th>DELIVERED</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {orders && orders.map(order => (
+              <tr key={order._id}>
+                <td>{order._id}</td>
+                <td>{moment(order.created_at).format('MMMM Do YYYY, h:mm:ss a')}</td>
+                <td>{order.totalPrice}</td>
+                <td>{order.isPaid ? moment(order.paidAt).format('MMMM Do YYYY, h:mm a') :
+                  <i className="fas fa-times" style={{color: "red"}}/>}</td>
+                <td>{order.isDelivered ? moment(order.deliveredAt).format('MMMM Do YYYY, h:mm a') :
+                  <i className="fas fa-times" style={{color: "red"}}/>}</td>
+                <td><LinkContainer to={`/orders/${order._id}`}><Button variant="light" className="btn-sm">Details</Button></LinkContainer>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   )

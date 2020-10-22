@@ -47,7 +47,7 @@ const CartScreen = ({match, location, history}) => {
                         {item.name}
                       </Link>
                     </Col>
-                    <Col md={2}>Price: {item.price}</Col>
+                    <Col md={2}>Price: ${item.price}</Col>
                     <Col md={2}>Qty: {item.qty}
                       <Form.Control as="select" value={item.qty}
                                     onChange={e => dispatch(addToCart(item.product, Number(e.target.value)))}>
