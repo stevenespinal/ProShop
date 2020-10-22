@@ -16,7 +16,7 @@ import {
   ORDER_LIST_PROFILE_RESET,
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
-  USER_LIST_FAILED
+  USER_LIST_FAILED, USER_LIST_RESET
 } from "../types";
 import axios from "axios";
 
@@ -127,9 +127,10 @@ export const listUsers = () => async (dispatch, getState) => {
 
 export const logout = () => dispatch => {
   localStorage.removeItem("userInfo");
-  dispatch({type: USER_LOGOUT});
+  dispatch({type: USER_LIST_RESET});
   dispatch({type: USER_DETAILS_RESET});
   dispatch({type: ORDER_LIST_PROFILE_RESET});
+  dispatch({type: USER_LOGOUT});
 }
 
 

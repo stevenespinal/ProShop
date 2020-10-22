@@ -3,7 +3,7 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
   USER_DETAILS_SUCCESS, USER_LIST_FAILED,
-  USER_LIST_REQUEST,
+  USER_LIST_REQUEST, USER_LIST_RESET,
   USER_LIST_SUCCESS,
   USER_LOGIN_FAILED,
   USER_LOGIN_REQUEST,
@@ -88,6 +88,8 @@ export const userList = (state = {users: []}, action) => {
       return {loading: false, users};
     case USER_LIST_FAILED:
       return {loading: false, error};
+    case USER_LIST_RESET:
+      return {users: []};
     default:
       return state;
   }
