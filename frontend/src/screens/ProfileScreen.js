@@ -57,6 +57,16 @@ const ProfileScreen = ({history}) => {
         {error && <Message variant="danger">{error}</Message>}
         {loading && <Loader/>}
         <Form onSubmit={submitHandler}>
+          <Form.Group controlId="id">
+            <Form.Label>User Id</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="User Id"
+              value={user._id || ""}
+              disabled
+              onChange={e => setName(e.target.value)}
+            />
+          </Form.Group>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -103,7 +113,7 @@ const ProfileScreen = ({history}) => {
           <Table striped bordered hover responsive className="table-sm">
             <thead>
             <tr>
-              <th>ID</th>
+              <th>ORDER ID</th>
               <th>DATE</th>
               <th>TOTAL</th>
               <th>PAID</th>

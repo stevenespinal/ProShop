@@ -10,7 +10,7 @@ import {
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAILED,
   USER_UPDATE_PROFILE_REQUEST,
-  USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAILED
+  USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAILED, USER_DETAILS_RESET, ORDER_LIST_PROFILE_RESET
 } from "../types";
 import axios from "axios";
 
@@ -101,6 +101,8 @@ export const updateUserProfile = user => async (dispatch, getState) => {
 export const logout = () => dispatch => {
   localStorage.removeItem("userInfo");
   dispatch({type: USER_LOGOUT});
+  dispatch({type: USER_DETAILS_RESET});
+  dispatch({type: ORDER_LIST_PROFILE_RESET});
 }
 
 

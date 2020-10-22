@@ -1,5 +1,5 @@
 import {
-  USER_DETAILS_FAILED, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAILED, USER_DETAILS_REQUEST, USER_DETAILS_RESET, USER_DETAILS_SUCCESS,
   USER_LOGIN_FAILED,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -48,6 +48,8 @@ export const userDetails = (state = {user: {}}, action) => {
       return {loading: false, user};
     case USER_DETAILS_FAILED:
       return {loading: false, error};
+    case USER_DETAILS_RESET:
+      return {user: {}}
     default:
       return state;
   }
