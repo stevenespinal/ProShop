@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {Form, Button, Row, Col} from "react-bootstrap";
+import {Form, Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import {getUserDetails} from "../actions/User";
+import {getUserDetails, editUser} from "../actions/User";
+import {USER_EDIT_RESET} from "../types";
 import FormContainer from "../components/Form";
 
 const EditUserScreen = ({match, history}) => {
@@ -16,26 +17,37 @@ const EditUserScreen = ({match, history}) => {
   const dispatch = useDispatch();
   const userDetails = useSelector(({userDetails}) => userDetails);
   const {loading, error, user} = userDetails;
+  const userUpdate = useSelector(({userEdit}) => userEdit);
+  const {loading: loadingEdit, success: successEdit, error: errorEdit} = userUpdate;
 
   useEffect(() => {
-    if (!user.name || user._id !== userId) {
-      dispatch(getUserDetails(userId));
+    if (successEdit) {
+      dispatch({type: USER_EDIT_RESET});
+      history.push("/admin/user-list");
     } else {
-      setEmail(user.email);
-      setName(user.name);
-      setIsAdmin(user.isAdmin)
+      if (!user.name || user._id !== userId) {
+        dispatch(getUserDetails(userId));
+      } else {
+        setEmail(user.email);
+        setName(user.name);
+        setIsAdmin(user.isAdmin);
+      }
     }
-  }, [user.name, dispatch, user._id, userId, user.email, user.isAdmin]);
+
+  }, [user, dispatch,  userId, successEdit, history]);
 
   const editUserHandler = (e) => {
     e.preventDefault();
+    dispatch(editUser({_id: userId, name, email, isAdmin}));
   }
 
   return (
     <>
-      <Link to={`/isAdmin/user-list`} className="btn btn-dark my-3">Go Back</Link>
+      <Link to={`/admin/user-list`} className="btn btn-dark my-3">Go Back</Link>
       <FormContainer>
         <h1>Edit User</h1>
+        {loadingEdit && <Loader/>}
+        {errorEdit && <Message variant="danger">{errorEdit}</Message>}
         {loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> : (
 
           <Form onSubmit={editUserHandler}>

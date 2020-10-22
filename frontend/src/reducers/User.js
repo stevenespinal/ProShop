@@ -4,7 +4,7 @@ import {
   USER_DETAILS_FAILED,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
-  USER_DETAILS_SUCCESS,
+  USER_DETAILS_SUCCESS, USER_EDIT_FAILED, USER_EDIT_REQUEST, USER_EDIT_RESET, USER_EDIT_SUCCESS,
   USER_LIST_FAILED,
   USER_LIST_REQUEST,
   USER_LIST_RESET,
@@ -106,6 +106,22 @@ export const userDelete = (state = {user: {}}, action) => {
       return {loading: false, success: true};
     case USER_DELETE_FAILED:
       return {loading: false, error};
+    default:
+      return state;
+  }
+}
+
+export const userEdit = (state = {user: {}}, action) => {
+  const {type, error} = action;
+  switch (type) {
+    case USER_EDIT_REQUEST:
+      return {loading: true};
+    case USER_EDIT_SUCCESS:
+      return {loading: false, success: true};
+    case USER_EDIT_FAILED:
+      return {loading: false, error};
+    case USER_EDIT_RESET:
+      return {user: {}}
     default:
       return state;
   }
