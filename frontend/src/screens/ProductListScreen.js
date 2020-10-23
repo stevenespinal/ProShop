@@ -93,7 +93,7 @@ const ProductListScreen = ({history, match}) => {
         <Modal show={show} onHide={() => setShow(false)}>
           {(name === "" || image === "" || brand === "" || category === "") &&
           <Message>* Please fill out all fields</Message>}
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title>Create A New Product</Modal.Title>
           </Modal.Header>
           <Modal.Body>

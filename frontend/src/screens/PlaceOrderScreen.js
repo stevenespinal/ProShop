@@ -19,6 +19,7 @@ const PlaceOrderScreen = ({history}) => {
     if (success) {
       history.push(`/orders/${order._id}`)
     }
+    //eslint-disable-next-line
   }, [history, success]);
 
   cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0));
