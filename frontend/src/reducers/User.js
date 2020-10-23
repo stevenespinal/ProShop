@@ -4,7 +4,11 @@ import {
   USER_DETAILS_FAILED,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
-  USER_DETAILS_SUCCESS, USER_EDIT_FAILED, USER_EDIT_REQUEST, USER_EDIT_RESET, USER_EDIT_SUCCESS,
+  USER_DETAILS_SUCCESS,
+  USER_EDIT_FAILED,
+  USER_EDIT_REQUEST,
+  USER_EDIT_RESET,
+  USER_EDIT_SUCCESS,
   USER_LIST_FAILED,
   USER_LIST_REQUEST,
   USER_LIST_RESET,
@@ -63,7 +67,7 @@ export const userDetails = (state = {user: {}}, action) => {
     case USER_DETAILS_FAILED:
       return {loading: false, error};
     case USER_DETAILS_RESET:
-      return {user: {}}
+      return {user: {}};
     default:
       return state;
   }

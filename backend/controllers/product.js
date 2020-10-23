@@ -44,23 +44,41 @@ export const createProduct = asyncHandler(async (req, res) => {
     countInStock
   });
 
-  if (newProduct) {
-    res.status(201).json({
-      user: newProduct.user,
-      name: newProduct.name,
-      image: newProduct.image,
-      brand: newProduct.brand,
-      category: newProduct.category,
-      description: newProduct.description,
-      price: newProduct.price,
-      reviews: newProduct.reviews,
-      rating: newProduct.rating,
-      numReviews: newProduct.numReviews,
-      countInStock: newProduct.countInStock
-    });
+  const createdProduct = newProduct.save();
+  res.json(createdProduct);
+  //
+  // if (newProduct) {
+  //   res.status(201).json({
+  //     user: newProduct.user,
+  //     name: newProduct.name,
+  //     image: newProduct.image,
+  //     brand: newProduct.brand,
+  //     category: newProduct.category,
+  //     description: newProduct.description,
+  //     price: newProduct.price,
+  //     reviews: newProduct.reviews,
+  //     rating: newProduct.rating,
+  //     numReviews: newProduct.numReviews,
+  //     countInStock: newProduct.countInStock
+  //   });
+
+});
+
+export const updateProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  const {name, image, brand, category, description, price, countInStock} = req.body;
+  if (product) {
+    product.name = name || product.name;
+    product.image = image || product.image;
+    product.brand = brand || product.brand;
+    product.category = category || product.category;
+    product.description = description || product.description;
+    product.price = price || product.price;
+    product.countInStock = countInStock || product.countInStock;
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
   } else {
     res.status(400);
     throw new Error("Invalid product data.");
   }
-
 })
