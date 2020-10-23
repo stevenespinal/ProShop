@@ -6,6 +6,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {listProducts, deleteProduct, createProduct} from "../actions/Product";
 import {PRODUCT_CREATE_RESET} from "../types";
+import axios from "axios";
 
 const ProductListScreen = ({history, match}) => {
   const [modal, setModal] = useState({
@@ -21,6 +22,7 @@ const ProductListScreen = ({history, match}) => {
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const dispatch = useDispatch();
   const userLogin = useSelector(({userLogin}) => userLogin);
@@ -59,6 +61,27 @@ const ProductListScreen = ({history, match}) => {
 
   const handleOpen = (data) => {
     setModal({show: true, data})
+  }
+
+  const handleUploadFile = async (e) => {
+    const {files} = e.target;
+    const formData = new FormData();
+    formData.append("image", files[0]);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      const {data} = await axios.post("/api/upload", formData, config);
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
   }
 
 
@@ -116,6 +139,13 @@ const ProductListScreen = ({history, match}) => {
                   onChange={e => setImage(e.target.value)}
                 />
               </Form.Group>
+              <Form.File
+                id="image-file"
+                label="Choose File"
+                custom
+                onChange={handleUploadFile}
+              />
+              {uploading && <Loader/>}
               <Form.Group controlId="brand">
                 <Form.Label>Brand</Form.Label>
                 <Form.Control
@@ -168,7 +198,7 @@ const ProductListScreen = ({history, match}) => {
               Cancel
             </Button>
             <Button variant="primary" onClick={() => createProductHandler()}>
-              Delete Product
+              Create Product
             </Button>
           </Modal.Footer>
         </Modal>
