@@ -4,10 +4,10 @@ import {
   ORDER_CREATE_SUCCESS,
   ORDER_FETCH_BY_ID_FAILED,
   ORDER_FETCH_BY_ID_REQUEST,
-  ORDER_FETCH_BY_ID_SUCCESS,
+  ORDER_FETCH_BY_ID_SUCCESS, ORDER_LIST_FAILED,
   ORDER_LIST_PROFILE_FAILED,
   ORDER_LIST_PROFILE_REQUEST, ORDER_LIST_PROFILE_RESET,
-  ORDER_LIST_PROFILE_SUCCESS,
+  ORDER_LIST_PROFILE_SUCCESS, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS,
   ORDER_PAY_FAILED,
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
@@ -75,3 +75,17 @@ export const listProfileOrders = (state = {orders: []}, action) => {
   }
 }
 
+
+export const listAllOrders = (state = {orders: []}, action) => {
+  const {type, orders, error} = action;
+  switch (type) {
+    case ORDER_LIST_REQUEST:
+      return {loading: true};
+    case ORDER_LIST_SUCCESS:
+      return {loading: false, orders};
+    case ORDER_LIST_FAILED:
+      return {loading: false, error};
+    default:
+      return state;
+  }
+}

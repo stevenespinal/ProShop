@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 
 export const addOrderItems = asyncHandler(async (req, res) => {
   const {orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, totalPrice, shippingPrice} = req.body;
-  if (orderItems && orderItems.length ===0) {
+  if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error("No Order Items");
   } else {
@@ -49,5 +49,10 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
 
 export const getMyOrders = asyncHandler(async (req, res) => {
   const order = await Order.find({user: req.user._id});
+  res.json(order);
+});
+
+export const getAllOrders = asyncHandler(async (req, res) => {
+  const order = await Order.find({}).populate("user", "id name");
   res.json(order);
 });
