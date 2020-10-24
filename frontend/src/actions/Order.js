@@ -10,7 +10,7 @@ import {
   ORDER_LIST_PROFILE_SUCCESS, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS,
   ORDER_PAY_FAILED,
   ORDER_PAY_REQUEST,
-  ORDER_PAY_SUCCESS,
+  ORDER_PAY_SUCCESS, USER_UPDATE_DELIVERED_FAILED, USER_UPDATE_DELIVERED_REQUEST, USER_UPDATE_DELIVERED_SUCCESS,
 } from "../types";
 import axios from "axios";
 
@@ -115,6 +115,29 @@ export const listAllOrders = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ORDER_LIST_FAILED,
+      error: error.response && error.response.data.message ? error.response.data.message : error.message
+    });
+  }
+}
+
+
+export const updateOrderDelivered = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({type: USER_UPDATE_DELIVERED_REQUEST});
+
+    const {userLogin: {userInfo}} = getState();
+    const config = {
+      headers: {
+        'Content-Type': "application/json",
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    await axios.put(`/api/orders/${order._id}/deliver`, {}, config);
+    dispatch({type: USER_UPDATE_DELIVERED_SUCCESS});
+
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_DELIVERED_FAILED,
       error: error.response && error.response.data.message ? error.response.data.message : error.message
     });
   }

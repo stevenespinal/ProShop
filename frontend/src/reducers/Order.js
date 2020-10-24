@@ -4,14 +4,22 @@ import {
   ORDER_CREATE_SUCCESS,
   ORDER_FETCH_BY_ID_FAILED,
   ORDER_FETCH_BY_ID_REQUEST,
-  ORDER_FETCH_BY_ID_SUCCESS, ORDER_LIST_FAILED,
+  ORDER_FETCH_BY_ID_SUCCESS,
+  ORDER_LIST_FAILED,
   ORDER_LIST_PROFILE_FAILED,
-  ORDER_LIST_PROFILE_REQUEST, ORDER_LIST_PROFILE_RESET,
-  ORDER_LIST_PROFILE_SUCCESS, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS,
+  ORDER_LIST_PROFILE_REQUEST,
+  ORDER_LIST_PROFILE_RESET,
+  ORDER_LIST_PROFILE_SUCCESS,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
   ORDER_PAY_FAILED,
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
-  ORDER_PAY_SUCCESS
+  ORDER_PAY_SUCCESS,
+  USER_UPDATE_DELIVERED_FAILED,
+  USER_UPDATE_DELIVERED_REQUEST,
+  USER_UPDATE_DELIVERED_RESET,
+  USER_UPDATE_DELIVERED_SUCCESS
 } from "../types";
 
 export const createOrder = (state = {}, action) => {
@@ -85,6 +93,22 @@ export const listAllOrders = (state = {orders: []}, action) => {
       return {loading: false, orders};
     case ORDER_LIST_FAILED:
       return {loading: false, error};
+    default:
+      return state;
+  }
+}
+
+export const updatedOrderDelivered = (state = {}, action) => {
+  const {type, error} = action;
+  switch (type) {
+    case USER_UPDATE_DELIVERED_REQUEST:
+      return {loading: true};
+    case USER_UPDATE_DELIVERED_SUCCESS:
+      return {loading: false, success: true};
+    case USER_UPDATE_DELIVERED_FAILED:
+      return {loading: false, error};
+    case USER_UPDATE_DELIVERED_RESET:
+      return {};
     default:
       return state;
   }

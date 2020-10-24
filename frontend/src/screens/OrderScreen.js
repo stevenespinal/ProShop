@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from "react";
-import {fetchOrder, payOrder} from "../actions/Order";
+import {fetchOrder, payOrder, updateOrderDelivered} from "../actions/Order";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import {Card, Col, Image, ListGroup, Row} from "react-bootstrap";
+import {Button, Card, Col, Image, ListGroup, Row} from "react-bootstrap";
 import {PayPalButton} from "react-paypal-button-v2";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import {ORDER_PAY_RESET} from "../types";
+import {ORDER_PAY_RESET, USER_UPDATE_DELIVERED_RESET} from "../types";
 import moment from "moment";
 
-const OrderScreen = ({match}) => {
+const OrderScreen = ({match, history}) => {
   const dispatch = useDispatch();
   const fetchOrderState = useSelector(({fetchOrder}) => fetchOrder);
   const {loading, order, error} = fetchOrderState;
@@ -19,7 +19,16 @@ const OrderScreen = ({match}) => {
   const paymentOrderState = useSelector(({payOrder}) => payOrder);
   const {loading: loadingPay, success: successPay, error: errorPay} = paymentOrderState;
 
+  const userLogin = useSelector(({userLogin}) => userLogin);
+  const {userInfo} = userLogin;
+
+  const deliveredOrder = useSelector(({updatedOrderDelivered}) => updatedOrderDelivered);
+  const {loading: deliveredOrderLoading, success: successDelivered} = deliveredOrder;
+
   useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
     const addPaypalScript = async () => {
       const {data: clientId} = await axios.get("/api/config/paypal");
       const script = document.createElement("script")
@@ -30,8 +39,9 @@ const OrderScreen = ({match}) => {
       document.body.appendChild(script);
     }
 
-    if (successPay || !order || order._id !== match.params.id) {
+    if (successPay || !order || order._id !== match.params.id || successDelivered) {
       dispatch({type: ORDER_PAY_RESET});
+      dispatch({type: USER_UPDATE_DELIVERED_RESET});
       dispatch(fetchOrder(match.params.id))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -40,7 +50,7 @@ const OrderScreen = ({match}) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, match.params.id, order, successPay]);
+  }, [dispatch, match.params.id, order, successPay, successDelivered, history, userInfo]);
 
   const addDecimals = num => {
     return (Math.round(num * 100) / 100).toFixed(2);
@@ -62,6 +72,10 @@ const OrderScreen = ({match}) => {
     console.log(errorPay)
   }
 
+  const deliverOrder = (order) => {
+    dispatch(updateOrderDelivered(order));
+  }
+
   return loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> : (
     <>
       <h1>Thank you for your order {order.user.name}!</h1>
@@ -76,7 +90,8 @@ const OrderScreen = ({match}) => {
               <p>
                 <strong>Address:</strong> {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalCode}, {order.shippingAddress.country}
               </p>
-              {order.isDelivered ? <Message variant="success">Delivered At {moment(order.deliveredAt).format('MMMM Do YYYY, h:mm a')}</Message> :
+              {order.isDelivered ? <Message variant="success">Delivered
+                  At {moment(order.deliveredAt).format('MMMM Do YYYY, h:mm a')}</Message> :
                 <Message variant="danger">Not Delivered</Message>}
 
             </ListGroup.Item>
@@ -85,7 +100,8 @@ const OrderScreen = ({match}) => {
               <p>
                 <strong>Method:</strong> {order.paymentMethod}
               </p>
-              {order.isPaid ? <Message variant="success">Paid On {moment(order.paidAt).format('MMMM Do YYYY, h:mm a')}</Message> :
+              {order.isPaid ?
+                <Message variant="success">Paid On {moment(order.paidAt).format('MMMM Do YYYY, h:mm a')}</Message> :
                 <Message variant="danger">Not Paid</Message>}
             </ListGroup.Item>
             <ListGroup.Item>
@@ -143,7 +159,14 @@ const OrderScreen = ({match}) => {
               {!order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader/>}
-                  {!sdkReady ? <Loader/> : <PayPalButton amount={order.totalPrice} onError={errorPayment} onSuccess={successPayment}/>}
+                  {!sdkReady ? <Loader/> :
+                    <PayPalButton amount={order.totalPrice} onError={errorPayment} onSuccess={successPayment}/>}
+                </ListGroup.Item>
+              )}
+              {deliveredOrderLoading && <Loader/>}
+              {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button className="btn btn-block" type="button" onClick={() => deliverOrder(order)}>Mark As Delivered</Button>
                 </ListGroup.Item>
               )}
             </ListGroup>
