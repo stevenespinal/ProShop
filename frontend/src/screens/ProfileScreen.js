@@ -7,6 +7,7 @@ import {getUserDetails, updateUserProfile} from "../actions/User";
 import {listProfileOrders} from "../actions/Order";
 import {LinkContainer} from "react-router-bootstrap";
 import moment from "moment";
+import { USER_UPDATE_PROFILE_RESET} from "../types";
 
 const ProfileScreen = ({history}) => {
   const [name, setName] = useState("");
@@ -29,8 +30,9 @@ const ProfileScreen = ({history}) => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      dispatch(listProfileOrders());
-      if (!user.name) {
+      if (!user || !user.name) {
+        dispatch(listProfileOrders());
+        dispatch({type: USER_UPDATE_PROFILE_RESET});
         dispatch(getUserDetails('profile'));
       } else {
         setName(user.name);

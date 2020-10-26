@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
+import morgan from "morgan";
 const port = process.env.PORT || 5000;
 import connectDb from "./config/db.js";
 import product from "./routes/product.js";
@@ -16,6 +17,9 @@ connectDb();
 const app = express();
 app.use(express.json());
 
+if (process.env.NODE_ENV === "DEVELOPMENT") {
+  app.use(morgan("dev"));
+}
 
 app.get("/", (req, res) => {
   res.send("Api is running");
