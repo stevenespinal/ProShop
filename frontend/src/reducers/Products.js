@@ -1,14 +1,25 @@
 import {
   PRODUCT_CREATE_FAILED,
-  PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_RESET, PRODUCT_CREATE_SUCCESS,
+  PRODUCT_CREATE_REQUEST,
+  PRODUCT_CREATE_RESET,
+  PRODUCT_CREATE_REVIEW_FAILED,
+  PRODUCT_CREATE_REVIEW_REQUEST,
+  PRODUCT_CREATE_REVIEW_RESET,
+  PRODUCT_CREATE_REVIEW_SUCCESS,
+  PRODUCT_CREATE_SUCCESS,
   PRODUCT_DELETE_FAILED,
-  PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
   PRODUCT_DETAILS_FAILED,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_LIST_FAILED,
   PRODUCT_LIST_REQUEST,
-  PRODUCT_LIST_SUCCESS, PRODUCT_UPDATE_FAILED, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_RESET, PRODUCT_UPDATE_SUCCESS,
+  PRODUCT_LIST_SUCCESS,
+  PRODUCT_UPDATE_FAILED,
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_UPDATE_RESET,
+  PRODUCT_UPDATE_SUCCESS,
 } from "../types";
 
 export const productList = (state = {products: []}, action) => {
@@ -68,6 +79,7 @@ export const createProduct = (state = {}, action) => {
       return state;
   }
 }
+
 export const updateProduct = (state = {product: {}}, action) => {
   const {type, error, product} = action;
   switch (type) {
@@ -79,6 +91,22 @@ export const updateProduct = (state = {product: {}}, action) => {
       return {loading: false, error};
     case PRODUCT_UPDATE_RESET:
       return {product: {}};
+    default:
+      return state;
+  }
+}
+
+export const createReview = (state = {}, action) => {
+  const {type, error} = action;
+  switch (type) {
+    case PRODUCT_CREATE_REVIEW_REQUEST:
+      return {loading: true};
+    case PRODUCT_CREATE_REVIEW_SUCCESS:
+      return {loading: false, success: true};
+    case PRODUCT_CREATE_REVIEW_FAILED:
+      return {loading: false, error};
+    case PRODUCT_CREATE_REVIEW_RESET:
+      return {};
     default:
       return state;
   }

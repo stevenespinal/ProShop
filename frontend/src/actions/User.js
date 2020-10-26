@@ -22,7 +22,7 @@ import {
   USER_DELETE_SUCCESS,
   USER_DELETE_FAILED,
   USER_EDIT_REQUEST,
-  USER_EDIT_SUCCESS, USER_EDIT_FAILED
+  USER_EDIT_SUCCESS, USER_EDIT_FAILED, PRODUCT_CREATE_REVIEW_RESET
 } from "../types";
 import axios from "axios";
 
@@ -179,6 +179,7 @@ export const logout = () => dispatch => {
   dispatch({type: USER_LIST_RESET});
   dispatch({type: USER_DETAILS_RESET});
   dispatch({type: ORDER_LIST_PROFILE_RESET});
+  dispatch({type: PRODUCT_CREATE_REVIEW_RESET});
   dispatch({type: USER_LOGOUT});
 }
 
