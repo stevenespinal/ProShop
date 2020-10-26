@@ -114,3 +114,31 @@ export const createReview = asyncHandler(async (req, res) => {
     throw new Error("Invalid product data.");
   }
 });
+
+export const deleteReview = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    const alreadyReviewed = product.reviews.find(review => review.user.toString() === req.user._id.toString());
+
+    if (alreadyReviewed) {
+      alreadyReviewed.remove();
+      res.status(200);
+    } else {
+      res.status(404);
+      throw new Error("Review not found")
+    }
+
+    product.numReviews = product.reviews.length;
+    if (product.numReviews === 0) {
+      product.rating = 0;
+    } else {
+      product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
+    }
+    await product.save();
+    res.status(201).json({message: "Review Removed."});
+
+  } else {
+    res.status(404);
+    throw new Error("Invalid product data.");
+  }
+});

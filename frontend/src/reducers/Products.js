@@ -9,6 +9,10 @@ import {
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_DELETE_FAILED,
   PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_REVIEW_FAILED,
+  PRODUCT_DELETE_REVIEW_REQUEST,
+  PRODUCT_DELETE_REVIEW_RESET,
+  PRODUCT_DELETE_REVIEW_SUCCESS,
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DETAILS_FAILED,
   PRODUCT_DETAILS_REQUEST,
@@ -111,3 +115,21 @@ export const createReview = (state = {}, action) => {
       return state;
   }
 }
+
+
+export const deleteReview = (state = {}, action) => {
+  const {type, error} = action;
+  switch (type) {
+    case PRODUCT_DELETE_REVIEW_REQUEST:
+      return {loading: true};
+    case PRODUCT_DELETE_REVIEW_SUCCESS:
+      return {loading: false, success: true};
+    case PRODUCT_DELETE_REVIEW_FAILED:
+      return {loading: false, error};
+    case PRODUCT_DELETE_REVIEW_RESET:
+      return {};
+    default:
+      return state;
+  }
+}
+

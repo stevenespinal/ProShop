@@ -3,8 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import {Row, Col, Image, Button, Card, ListGroup, Form} from "react-bootstrap";
 import Rating from "../components/Rating";
-import {detailProducts, createReview} from "../actions/Product";
-import {PRODUCT_CREATE_REVIEW_RESET} from "../types";
+import {detailProducts, createReview, deleteReview} from "../actions/Product";
+import {PRODUCT_CREATE_REVIEW_RESET, PRODUCT_DELETE_REVIEW_RESET} from "../types";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import moment from "moment";
@@ -15,6 +15,7 @@ const ProductScreen = ({match, history}) => {
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState("");
   const [ratingError, setRatingError] = useState("");
+  const [deletedSuccess, setDeletedSuccess] = useState("");
   const dispatch = useDispatch();
   const productDetail = useSelector(({productDetail}) => productDetail);
   const {loading, error, product} = productDetail;
@@ -22,15 +23,28 @@ const ProductScreen = ({match, history}) => {
   const {error: errorReview, success} = reviewProduct;
   const userLogin = useSelector(({userLogin}) => userLogin);
   const {userInfo} = userLogin;
+  const deleteProductReview = useSelector(({deleteReview}) => deleteReview);
+  const {success: deleteSuccess} = deleteProductReview;
 
   useEffect(() => {
     if (success) {
       setRating(0);
       setComment("");
     }
+
+    if (deleteSuccess) {
+      setDeletedSuccess("Successfully Deleted Review")
+      setTimeout(() => {
+        dispatch({type: PRODUCT_DELETE_REVIEW_RESET});
+        setDeletedSuccess("");
+      }, 5000);
+    }
+
     dispatch({type: PRODUCT_CREATE_REVIEW_RESET});
     dispatch(detailProducts(match.params.id));
-  }, [dispatch, match.params.id, success]);
+
+
+  }, [dispatch, match.params.id, success, deleteSuccess]);
 
   const addToCart = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`);
@@ -52,6 +66,12 @@ const ProductScreen = ({match, history}) => {
       dispatch(createReview(match.params.id, {rating, comment}))
     }
   };
+
+  const handleDelete = (reviewUser) => {
+    if (userInfo._id === reviewUser) {
+      dispatch(deleteReview(match.params.id));
+    }
+  }
 
   return (
     <>
@@ -120,7 +140,8 @@ const ProductScreen = ({match, history}) => {
           </Row>
           <Row>
             <Col md={6}>
-              <h2>Reviews</h2>
+              {deleteSuccess && <Message variant="success">{deletedSuccess}</Message>}
+              <h2 className="my-2">Reviews</h2>
               {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant="flush">
                 {product.reviews.map(review => (
@@ -129,6 +150,9 @@ const ProductScreen = ({match, history}) => {
                     <Rating value={review.rating}/>
                     <p>{moment(review.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
                     <p>{review.comment}</p>
+                    {userInfo && (review.user === userInfo._id) &&
+                    <span style={{color: "red", cursor: "pointer"}} onClick={() => handleDelete(review.user)}><i
+                      className="fas fa-times"/> Delete Review</span>}
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item>
