@@ -34,7 +34,7 @@ const EditUserScreen = ({match, history}) => {
       }
     }
 
-  }, [user, dispatch,  userId, successEdit, history]);
+  }, [user, dispatch, userId, successEdit, history]);
 
   const editUserHandler = (e) => {
     e.preventDefault();

@@ -1,6 +1,7 @@
 import {
   USER_DELETE_FAILED,
-  USER_DELETE_REQUEST, USER_DELETE_SUCCESS,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
   USER_DETAILS_FAILED,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -22,6 +23,7 @@ import {
   USER_REGISTER_SUCCESS,
   USER_UPDATE_PROFILE_FAILED,
   USER_UPDATE_PROFILE_REQUEST,
+  USER_UPDATE_PROFILE_RESET,
   USER_UPDATE_PROFILE_SUCCESS
 } from "../types";
 
@@ -82,6 +84,8 @@ export const userUpdateProfile = (state = {user: {}}, action) => {
       return {loading: false, userInfo, success: true};
     case USER_UPDATE_PROFILE_FAILED:
       return {loading: false, error};
+    case USER_UPDATE_PROFILE_RESET:
+      return {};
     default:
       return state;
   }
@@ -127,7 +131,7 @@ export const userEdit = (state = {user: {}}, action) => {
     case USER_EDIT_FAILED:
       return {loading: false, error};
     case USER_EDIT_RESET:
-      return {user: {}}
+      return {}
     default:
       return state;
   }

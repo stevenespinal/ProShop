@@ -22,7 +22,9 @@ import {
   USER_DELETE_SUCCESS,
   USER_DELETE_FAILED,
   USER_EDIT_REQUEST,
-  USER_EDIT_SUCCESS, USER_EDIT_FAILED, PRODUCT_CREATE_REVIEW_RESET
+  USER_EDIT_SUCCESS,
+  USER_EDIT_FAILED,
+  PRODUCT_CREATE_REVIEW_RESET
 } from "../types";
 import axios from "axios";
 
@@ -101,7 +103,8 @@ export const updateUserProfile = user => async (dispatch, getState) => {
     }
     const {data} = await axios.put(`/api/users/profile`, user, config);
     dispatch({type: USER_UPDATE_PROFILE_SUCCESS, userInfo: data})
-
+    dispatch({type: USER_LOGIN_SUCCESS, userInfo: data});
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAILED,
