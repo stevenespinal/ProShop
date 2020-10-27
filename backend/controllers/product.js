@@ -154,3 +154,8 @@ export const deleteReview = asyncHandler(async (req, res) => {
     throw new Error("Invalid product data.");
   }
 });
+
+export const topProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({rating: -1}).limit(3);
+  res.json(products);
+});

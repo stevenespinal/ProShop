@@ -19,7 +19,7 @@ import {
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_LIST_FAILED,
   PRODUCT_LIST_REQUEST,
-  PRODUCT_LIST_SUCCESS,
+  PRODUCT_LIST_SUCCESS, PRODUCT_TOP_FAILED, PRODUCT_TOP_REQUEST, PRODUCT_TOP_SUCCESS,
   PRODUCT_UPDATE_FAILED,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_RESET,
@@ -128,6 +128,21 @@ export const deleteReview = (state = {}, action) => {
       return {loading: false, error};
     case PRODUCT_DELETE_REVIEW_RESET:
       return {};
+    default:
+      return state;
+  }
+}
+
+
+export const topProducts = (state = {products: []}, action) => {
+  const {type, error, products} = action;
+  switch (type) {
+    case PRODUCT_TOP_REQUEST:
+      return {loading: true, products: []};
+    case PRODUCT_TOP_SUCCESS:
+      return {loading: false, success: true, products};
+    case PRODUCT_TOP_FAILED:
+      return {loading: false, error};
     default:
       return state;
   }

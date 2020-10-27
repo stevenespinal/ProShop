@@ -6,14 +6,17 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_DELETE_FAILED,
-  PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_REVIEW_FAILED, PRODUCT_DELETE_REVIEW_REQUEST, PRODUCT_DELETE_REVIEW_SUCCESS,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_REVIEW_FAILED,
+  PRODUCT_DELETE_REVIEW_REQUEST,
+  PRODUCT_DELETE_REVIEW_SUCCESS,
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DETAILS_FAILED,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_LIST_FAILED,
   PRODUCT_LIST_REQUEST,
-  PRODUCT_LIST_SUCCESS,
+  PRODUCT_LIST_SUCCESS, PRODUCT_TOP_FAILED, PRODUCT_TOP_REQUEST, PRODUCT_TOP_SUCCESS,
   PRODUCT_UPDATE_FAILED,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS
@@ -158,5 +161,15 @@ export const deleteReview = productId => async (dispatch, getState) => {
   }
 }
 
-
-
+export const topProducts = () => async dispatch => {
+  try {
+    dispatch({type: PRODUCT_TOP_REQUEST});
+    const {data} = await axios.get(`/api/products/top`);
+    dispatch({type: PRODUCT_TOP_SUCCESS, products: data});
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_TOP_FAILED,
+      error: error.response && error.response.data.message ? error.response.data.message : error.message
+    });
+  }
+}
