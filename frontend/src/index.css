@@ -20,3 +20,13 @@ h3 {
 .nav-item {
     margin-right: 0;
 }
+
+.page-link {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.page-link > .page-item > .page-link {
+    border: 1px solid black;
+}
