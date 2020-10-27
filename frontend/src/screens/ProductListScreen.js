@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import {listProducts, deleteProduct, createProduct} from "../actions/Product";
 import {PRODUCT_CREATE_RESET} from "../types";
 import axios from "axios";
+import Paginate from "../components/Paginate";
 
 const ProductListScreen = ({history, match}) => {
   const [modal, setModal] = useState({
@@ -24,11 +25,12 @@ const ProductListScreen = ({history, match}) => {
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
 
+  const pageNumber = match.params.pageNumber || 1;
   const dispatch = useDispatch();
   const userLogin = useSelector(({userLogin}) => userLogin);
   const {userInfo} = userLogin
   const productList = useSelector(({productList}) => productList);
-  const {loading, error, products} = productList;
+  const {loading, error, products, page, pages} = productList;
   const productDelete = useSelector(({deleteProduct}) => deleteProduct);
   const {success, error: productDeleteError, loading: loadingDelete} = productDelete;
 
@@ -45,10 +47,10 @@ const ProductListScreen = ({history, match}) => {
     if (successCreate) {
       history.push(`/admin/product/${product._id}/edit`)
     } else {
-      dispatch(listProducts());
+      dispatch(listProducts('', pageNumber));
     }
 
-  }, [dispatch, history, userInfo, success, successCreate, product]);
+  }, [dispatch, history, userInfo, success, successCreate, product, pageNumber]);
 
   const deleteProductHandler = productId => {
     dispatch(deleteProduct(productId));
@@ -208,56 +210,59 @@ const ProductListScreen = ({history, match}) => {
       {loadingCreate && <Loader/>}
       {productCreateError && <Message variant="danger">{productCreateError}</Message>}
       {loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> : (
-        <Table striped bordered hover responsive className="table-sm">
-          <thead>
-          <tr>
-            <th>PRODUCT ID</th>
-            <th>NAME</th>
-            <th>PRICE</th>
-            <th>CATEGORY</th>
-            <th>BRAND</th>
-            <th>ACTION</th>
-          </tr>
-          </thead>
-          <tbody>
-          {products && products.map(product => {
-            return (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td>{product.category}</td>
-                <td>{product.brand}</td>
-                <td>
-                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light" type="button" className="btn-sm">
-                      <i className="fas fa-edit"/>
+        <>
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+            <tr>
+              <th>PRODUCT ID</th>
+              <th>NAME</th>
+              <th>PRICE</th>
+              <th>CATEGORY</th>
+              <th>BRAND</th>
+              <th>ACTION</th>
+            </tr>
+            </thead>
+            <tbody>
+            {products && products.map(product => {
+              return (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+                  <td>{product.brand}</td>
+                  <td>
+                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                      <Button variant="light" type="button" className="btn-sm">
+                        <i className="fas fa-edit"/>
+                      </Button>
+                    </LinkContainer>
+                    <Button variant="danger" type="button" className="btn-sm"
+                            onClick={() => handleOpen(product)}>
+                      <i className="fas fa-trash"/>
                     </Button>
-                  </LinkContainer>
-                  <Button variant="danger" type="button" className="btn-sm"
-                          onClick={() => handleOpen(product)}>
-                    <i className="fas fa-trash"/>
-                  </Button>
-                </td>
-              </tr>
-            )
-          })}
-          <Modal show={modal.show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Delete {modal.data.name}?</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to delete {modal.data.name}?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={() => deleteProductHandler(modal.data._id)}>
-                Delete Product
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          </tbody>
-        </Table>
+                  </td>
+                </tr>
+              )
+            })}
+            <Modal show={modal.show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>Delete {modal.data.name}?</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Are you sure you want to delete {modal.data.name}?</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={() => deleteProductHandler(modal.data._id)}>
+                  Delete Product
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            </tbody>
+          </Table>
+          <Paginate pages={pages} page={page} isAdmin={true}/>
+        </>
       )}
     </>
   )

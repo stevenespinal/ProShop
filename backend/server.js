@@ -15,11 +15,10 @@ dotenv.config();
 connectDb();
 
 const app = express();
-app.use(express.json());
-
 if (process.env.NODE_ENV === "DEVELOPMENT") {
   app.use(morgan("dev"));
 }
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Api is running");
