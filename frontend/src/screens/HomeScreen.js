@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import {Row, Col} from "react-bootstrap";
+import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Product from "../components/Product";
 import {listProducts} from "../actions/Product";
@@ -7,6 +8,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 const HomeScreen = ({match}) => {
   const keyword = match.params.keyword;
@@ -21,7 +23,8 @@ const HomeScreen = ({match}) => {
 
   return (
     <>
-      {!keyword && <ProductCarousel/>}
+     <Meta title="Welcome to ProShop" description="Best products for the low" keywords="electronics, cheap, low, products"/>
+      {!keyword ? <ProductCarousel/> : <Link to="/" className="btn btn-dark mb-5">Go Back</Link>}
       {loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> : pages === 0 ?
         <h6 className="my-5"><i className="fas fa-redo-alt"/> No results found. Please try again or use a different search term. </h6> :
         <>

@@ -8,6 +8,7 @@ import {PRODUCT_CREATE_REVIEW_RESET, PRODUCT_DELETE_REVIEW_RESET} from "../types
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import moment from "moment";
+import Meta from "../components/Meta";
 
 const ProductScreen = ({match, history}) => {
   const [qty, setQty] = useState(1);
@@ -78,6 +79,7 @@ const ProductScreen = ({match, history}) => {
       <Link to="/" className="btn btn-dark my-3">Go Back</Link>
       {loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> :
         <>
+          <Meta title={product.name}/>
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid/>
